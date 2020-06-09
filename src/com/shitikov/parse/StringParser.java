@@ -1,66 +1,43 @@
 package com.shitikov.parse;
 
 import com.shitikov.exception.IncorrectFormatException;
-import com.shitikov.validate.Validator;
 
 public class StringParser {
 
-    public int parseStringToInt(String numberInput, String pattern) {
-        Validator validator = new Validator();
-
-        if (validator.validateInput(numberInput, pattern)) {
-            try {
-                return Integer.parseInt(numberInput);
-            } catch (NumberFormatException e) {
-                throw new IncorrectFormatException("Invalid input format");
-            }
-        } else {
-            throw new IncorrectFormatException("Invalid input format");
+    public int parseStringToInt(String numberInput) throws IncorrectFormatException {
+        try {
+            return Integer.parseInt(numberInput);
+        } catch (NumberFormatException e) {
+            throw new IncorrectFormatException("Incorrect input format");
         }
     }
 
-    public int[] convertStringToIntArray(String numbersInput) {
+    public int[] parseStringToIntArray(String numbersInput) throws IncorrectFormatException {
 
         String[] numbers = numbersInput.split("\\s");
         int[] result = new int[numbers.length];
 
         for (int i = 0; i < numbers.length; i++) {
-            int number = parseStringToInt(numbers[i], "\\d+");
+            int number = parseStringToInt(numbers[i]);
             result[i] = number;
         }
 
         return result;
     }
 
-    public long convertStringToLong(String input, String pattern) {
-        Validator validator = new Validator();
-
-        if (validator.validateInput(input, pattern)) {
+    public long parseStringToLong(String input) throws IncorrectFormatException {
+        try {
             return Long.parseLong(input);
-        } else {
-            throw new IncorrectFormatException("Invalid input format");
+        } catch (NumberFormatException e) {
+            throw new IncorrectFormatException("Incorrect input format");
         }
     }
 
-    public double convertStringToDouble(String numberInput, boolean mayBeNegative) {
-        Validator validator = new Validator();
-
-        String pattern = mayBeNegative ? "\\-?\\d+\\.?\\d*" : "\\d+\\.?\\d*";
-
-        if (validator.validateInput(numberInput, pattern)) {
-            return Double.parseDouble(numberInput);
-        } else {
-            throw new IncorrectFormatException("Invalid input format");
-        }
-    }
-
-    public int convertStringToSeconds(String secondsInput, String pattern) {
-        Validator validator = new Validator();
-
-        if (validator.validateInputTime(secondsInput, pattern)) {
-            return Integer.parseInt(secondsInput);
-        } else {
-            throw new IncorrectFormatException("Invalid input format");
+    public double parseStringToDouble(String input) throws IncorrectFormatException {
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            throw new IncorrectFormatException("Incorrect input format");
         }
     }
 }

@@ -2,17 +2,19 @@ package com.shitikov.service;
 
 import com.shitikov.entity.PassedTime;
 import com.shitikov.entity.Month;
-import com.shitikov.parse.StringParser;
+import com.shitikov.exception.IncorrectFormatException;
+import com.shitikov.validate.CalendarValidator;
 
 public class CalendarService {
-    private final int LEAP_YEAR_DIVIDER = 4;
-    private final int START_OF_LEAP_YEAR = 1582;
+    private static final int LEAP_YEAR_DIVIDER = 4;
+    private static final int START_OF_LEAP_YEAR = 1582;
 
-    public int numberOfDaysInMonth(String yearInput, String monthNumberInput) {
-        StringParser parser = new StringParser();
+    public int numberOfDaysInMonth(int year, int monthNumber) throws IncorrectFormatException {
+        CalendarValidator validator = new CalendarValidator();
 
-        int year = parser.parseStringToInt(yearInput, "\\d{1,4}");
-        int monthNumber = parser.parseStringToInt(monthNumberInput, "[1-9]|1[0-2]");
+        if (!validator.validateYear(year) || !validator.validateMonth(monthNumber)) {
+            throw new IncorrectFormatException("Incorrect format of date");
+        }
 
         int numberOfDays;
 
@@ -34,10 +36,12 @@ public class CalendarService {
         return isLeapYear;
     }
 
-    public PassedTime getTime(String secondsInput) {
-        StringParser parser = new StringParser();
+    public PassedTime getTime(int timeInSeconds) throws IncorrectFormatException {
+        CalendarValidator validator = new CalendarValidator();
 
-        int timeInSeconds = parser.convertStringToSeconds(secondsInput,"\\d{1,5}");
+        if (!validator.validateTime(timeInSeconds)) {
+            throw new IncorrectFormatException("Incorrect format of date");
+        }
         PassedTime time = new PassedTime(timeInSeconds);
 
         return time;

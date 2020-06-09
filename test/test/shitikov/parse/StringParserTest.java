@@ -2,73 +2,76 @@ package test.shitikov.parse;
 
 import com.shitikov.exception.IncorrectFormatException;
 import com.shitikov.parse.StringParser;
-import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
 public class StringParserTest {
+    StringParser stringParser;
+
+    @BeforeClass
+    public void setUp(){
+        stringParser = new StringParser();
+    }
 
     @Test(expectedExceptions = IncorrectFormatException.class)
-    public void testParseStringToIntException() {
-        StringParser stringParser = new StringParser();
-        stringParser.parseStringToInt("sdfsd", "\\d+");
+    public void testParseStringToIntException() throws IncorrectFormatException {
+        stringParser.parseStringToInt("sdfsd");
     }
 
     @Test
     public void testParseStringToInt() {
-        StringParser stringParser = new StringParser();
-        int actual = stringParser.parseStringToInt("6", "\\d+");
-        int expected = 6;
-        Assert.assertEquals(actual, expected, "Test failed as...");
+        try {
+            int actual = stringParser.parseStringToInt("6");
+            int expected = 6;
+            assertEquals(actual, expected, "Test failed as...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
+
     }
 
     @Test
     public void testConvertStringToIntArray() {
-        StringParser stringParser = new StringParser();
-        int[] actual = stringParser.convertStringToIntArray("25 36 45 25");
-        int[] expected = new int[]{25, 36, 45, 25};
-        Assert.assertEquals(actual, expected, "Test failed as...");
+        try {
+            int[] actual = stringParser.parseStringToIntArray("25 36 45 25");
+            int[] expected = new int[]{25, 36, 45, 25};
+            assertEquals(actual, expected, "Test failed as...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
     }
 
     @Test(expectedExceptions = IncorrectFormatException.class)
-    public void testConvertStringToLongException() {
-        StringParser stringParser = new StringParser();
-        stringParser.convertStringToLong("-85sd", "\\-?\\d+");
+    public void testConvertStringToLongException() throws IncorrectFormatException {
+        stringParser.parseStringToLong("-85sd");
     }
 
     @Test
     public void testConvertStringToLong() {
-        StringParser stringParser = new StringParser();
-        long actual = stringParser.convertStringToLong("-8556265845258", "\\-?\\d+");
-        long expected = -8556265845258l;
-        Assert.assertEquals(actual, expected, "Test failed as...");
+        try {
+            long actual = stringParser.parseStringToLong("-8556265845258");
+            long expected = -8556265845258L;
+            assertEquals(actual, expected, "Test failed as...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
     }
 
     @Test(expectedExceptions = IncorrectFormatException.class)
-    public void testConvertStringToDoubleException() {
-        StringParser stringParser = new StringParser();
-        stringParser.convertStringToDouble("number", true);
+    public void testConvertStringToDoubleException() throws IncorrectFormatException {
+        stringParser.parseStringToDouble("number");
     }
 
     @Test
     public void testConvertStringToDouble() {
-        StringParser stringParser = new StringParser();
-        double actual = stringParser.convertStringToDouble("25.636", true);
-        double expected = 25.636;
-        Assert.assertEquals(actual, expected, 0.001, "Test failed as...");
-    }
-
-    @Test(expectedExceptions = IncorrectFormatException.class)
-    public void testConvertStringToSecondsException() {
-        StringParser stringParser = new StringParser();
-        stringParser.convertStringToSeconds("1256.25","\\d{1,5}");
-
-    }
-
-    @Test
-    public void testConvertStringToSeconds() {
-        StringParser stringParser = new StringParser();
-        int actual = stringParser.convertStringToSeconds("2567","\\d{1,5}");
-        int expected = 2567;
-        Assert.assertEquals(actual, expected,"Test failed as...");
+        try {
+            double actual = stringParser.parseStringToDouble("25.636");
+            double expected = 25.636;
+            assertEquals(actual, expected, 0.001, "Test failed as...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
     }
 }

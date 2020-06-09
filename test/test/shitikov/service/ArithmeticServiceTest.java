@@ -1,52 +1,69 @@
 package test.shitikov.service;
 
+import com.shitikov.exception.IncorrectFormatException;
 import com.shitikov.service.ArithmeticService;
-import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
+
 public class ArithmeticServiceTest {
+    ArithmeticService arithmeticService;
+
+    @BeforeClass
+    public void setUp(){
+        arithmeticService = new ArithmeticService();
+    }
 
     @Test
     public void testCalcSquareOfLastDigitPositive() {
-        ArithmeticService arithmeticService = new ArithmeticService();
-        double actual = arithmeticService.calcSquareOfLastDigit("83");
+        double actual = arithmeticService.calcSquareOfLastDigit(83);
         double expected = 9.0;
-        Assert.assertEquals(actual, expected, "Test failed as ...");
+        assertEquals(actual, expected, "Test failed as ...");
     }
 
     @Test
     public void testCalcSquareOfLastDigitNegative() {
-        ArithmeticService arithmeticService = new ArithmeticService();
-        double actual = arithmeticService.calcSquareOfLastDigit("658");
+        double actual = arithmeticService.calcSquareOfLastDigit(658);
         double expected = 7.0;
-        Assert.assertEquals(actual, expected, "Test failed as ...");
+        assertNotEquals(actual, expected, "Test failed as ...");
     }
 
     @Test
     public void testCheckForTwoAndMoreEvenNumbersTrue() {
-        ArithmeticService arithmeticService = new ArithmeticService();
-        boolean condition = arithmeticService.checkForTwoAndMoreEvenNumbers("32 11 16 17");
-        Assert.assertTrue(condition, "Test failed as ...");
+        boolean condition = arithmeticService.checkForTwoAndMoreEvenNumbers(new int[] {12, 13, 16, 11});
+        assertTrue(condition, "Test failed as ...");
     }
 
     @Test
     public void testCheckForTwoAndMoreEvenNumbersFalse() {
         ArithmeticService arithmeticService = new ArithmeticService();
-        boolean condition = arithmeticService.checkForTwoAndMoreEvenNumbers("32 11 115 17");
-        Assert.assertFalse(condition, "Test failed as ...");
+        boolean condition = arithmeticService.checkForTwoAndMoreEvenNumbers(new int[] {12, 13, 15, 11});
+        assertFalse(condition, "Test failed as ...");
+    }
+
+    @Test(expectedExceptions = IncorrectFormatException.class)
+    public void testIsPerfectNumberException() throws IncorrectFormatException {
+        arithmeticService.isPerfectNumber(-56);
     }
 
     @Test
     public void testIsPerfectNumberTrue() {
-        ArithmeticService arithmeticService = new ArithmeticService();
-        boolean condition = arithmeticService.isPerfectNumber("496");
-        Assert.assertTrue(condition, "Test failed as ...");
+        try {
+            boolean condition = arithmeticService.isPerfectNumber(496);
+            assertTrue(condition, "Test failed as ...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
     }
 
     @Test
     public void testIsPerfectNumberFalse() {
-        ArithmeticService arithmeticService = new ArithmeticService();
-        boolean condition = arithmeticService.isPerfectNumber("153");
-        Assert.assertFalse(condition, "Test failed as ...");
+        try {
+            boolean condition = arithmeticService.isPerfectNumber(153);
+            assertFalse(condition, "Test failed as ...");
+        } catch (IncorrectFormatException e) {
+            fail("Exception has occurred");
+        }
     }
 }
